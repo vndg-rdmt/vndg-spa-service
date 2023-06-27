@@ -1,9 +1,24 @@
 package app
 
-/*
-Holds a defailt application config
-*/
+// A default application config
 var Config *ApplicationConfig
+
+func init() {
+	Config = &ApplicationConfig{
+		Server: ServerConfig{
+			Addr: "127.0.0.1",
+			Port: "9999",
+		},
+		Client: ClientConfig{
+			Directory: "./client-app",
+			Document:  "index.html",
+		},
+		Limiter: LimiterConfig{
+			Retries:  10,
+			JailTime: 15,
+		},
+	}
+}
 
 type ApplicationConfig struct {
 	Server  ServerConfig
@@ -12,8 +27,7 @@ type ApplicationConfig struct {
 	Limiter LimiterConfig
 }
 
-// ===========================
-
+// Application parts configurations
 type ServerConfig struct {
 	Addr string
 	Port string
@@ -33,21 +47,4 @@ type LimiterConfig struct {
 type LogsConfig struct {
 	Addr string
 	Port string
-}
-
-func init() {
-	Config = &ApplicationConfig{
-		Server: ServerConfig{
-			Addr: "127.0.0.1",
-			Port: "9999",
-		},
-		Client: ClientConfig{
-			Directory: "./client-app",
-			Document:  "index.html",
-		},
-		Limiter: LimiterConfig{
-			Retries:  10,
-			JailTime: 15,
-		},
-	}
 }
