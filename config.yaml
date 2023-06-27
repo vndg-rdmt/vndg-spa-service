@@ -1,0 +1,21 @@
+
+  server:
+    addr: 127.0.0.1
+    port: 6500
+    tls:
+      enable: false
+
+  client:
+    directory: /client
+    document: index.html
+
+  dynamic_content_route: /content
+  api_route: /api
+
+  logs:
+    enable: false
+    localfile: ./app.logs
+
+limiter:
+  requests: 8
+  expire_in_minutes: 2
