@@ -6,7 +6,7 @@ clean:
 	@rm -r $(DEST_DIRECTORY)/*
 
 build:
-	@go build -o $(DEST_DIRECTORY) $(CMD_DIR)/$(APP_NAME);
+	@go build -o $(DEST_DIRECTORY)/$(APP_NAME) $(CMD_DIR)/$(APP_NAME);
 	
 run: build
 	@$(DEST_DIRECTORY)/$(APP_NAME)

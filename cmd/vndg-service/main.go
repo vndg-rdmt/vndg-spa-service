@@ -1,7 +1,8 @@
 package main
 
 import (
-	"silvex/app"
+	"silvex/handlers"
+	"silvex/pkg/logs"
 	"silvex/routing"
 
 	"github.com/gofiber/fiber/v2"
@@ -17,17 +18,20 @@ type Webserver struct {
 func (s *Webserver) Launch() {
 	s.engineRouter(s.engine)
 	err := s.startupFunc(s.engine)
-	if s.callbackFailedToStart != nil && err != nil {
+	if err != nil && s.callbackFailedToStart != nil {
 		s.callbackFailedToStart(err)
 	}
 }
 
 func main() {
 	server := Webserver{
-		engine:                EngineMultiprocessOptimizied(handlerLimiterBan(app.LogClientBannedByLimiter)),
+		engine: EngineMultiprocessOptimizied(handlers.RejectClientDetailed(
+			logs.EventClientRejected,
+			fiber.StatusTooManyRequests,
+		)),
 		startupFunc:           StartupProduction,
-		engineRouter:          routing.AttachClientRouting,
-		callbackFailedToStart: CallbackFatalFailStartup(app.LogServerFailedToStart, eventDetailerFatal),
+		engineRouter:          routing.SinglePageApplication(handlers.ClientAppHandlerCached()),
+		callbackFailedToStart: callbackFatalFailStartup(logs.EventServerFailedToStart, eventDetailerFatal),
 	}
 	server.Launch()
 }
